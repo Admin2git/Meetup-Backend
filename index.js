@@ -65,6 +65,32 @@ app.get("/events", async (req, res) => {
   }
 });
 
+//read all event by Id
+
+async function readAllEventById(eventId) {
+  try {
+    const event = await Meetup.findById(eventId);
+    return event;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+app.get("/events/:eventId", async (req, res) => {
+  try {
+    const event = await readAllEventById(req.params.eventId);
+    if (event) {
+      res.status(201).json(event);
+    } else {
+      res.status(404).json({ error: "No event found." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch movie" });
+  }
+});
+
+//read all evemt by title
+
 async function readAllEventByTitle(eventTitle) {
   try {
     const event = await Meetup.findOne({ title: eventTitle });
