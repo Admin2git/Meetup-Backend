@@ -44,6 +44,8 @@ app.post("/events", async (req, res) => {
   }
 });
 
+//-------------------------------------------------------------------
+
 app.post("/meetups", async (req, res) => {
   try {
     const {
@@ -96,6 +98,8 @@ app.post("/meetups", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+//-----------------------------------------------------------------------
 
 async function readAllEvent() {
   try {
