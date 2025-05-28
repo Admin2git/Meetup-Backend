@@ -9,7 +9,7 @@ const MeetupSchema = new mongoose.Schema(
     typeOfEvent: {
       type: String,
       required: true,
-      enum: ["Online", "Offline", "Both"],
+      enum: ["Online", "Offline"],
     },
     thumbnail: {
       type: String,
