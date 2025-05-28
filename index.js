@@ -13,6 +13,7 @@ app.use(cors(corsOptions));
 
 const { initializeDatabase } = require("./db/db.connect");
 const Meetup = require("./models/meetup.model");
+const Speaker = require("./models/Speaker.model");
 
 initializeDatabase();
 
@@ -40,6 +41,59 @@ app.post("/events", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch movie" });
+  }
+});
+
+app.post("/meetups", async (req, res) => {
+  try {
+    const {
+      title,
+      typeOfEvent,
+      thumbnail,
+      details,
+      tags,
+      eventTiming,
+      speakers, // Array of speaker objects
+      hostedBy,
+      capacity,
+      contactEmail,
+      eventPrice,
+      eventVenue,
+      eventAddress,
+    } = req.body;
+
+    // 1. Create speaker documents first
+    const speakerDocs = await Promise.all(
+      speakers.map(async (sp) => {
+        // Optionally check if speaker exists to avoid duplicates
+        return await Speaker.create(sp);
+      })
+    );
+
+    // 2. Extract speaker _ids
+    const speakerIds = speakerDocs.map((sp) => sp._id);
+
+    // 3. Create meetup with speaker references
+    const meetup = await Meetup.create({
+      title,
+      typeOfEvent,
+      thumbnail,
+      details,
+      tags,
+      eventTiming,
+      speakers: speakerIds,
+      hostedBy,
+      capacity,
+      contactEmail,
+      eventPrice,
+      eventVenue,
+      eventAddress,
+    });
+
+    res.status(201).json({ message: "Meetup created", meetup });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

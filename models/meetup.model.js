@@ -29,12 +29,23 @@ const MeetupSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    speakers: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    // speakers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Speaker" }],
+    speakers: {
+      type: [
+        {
+          name: { type: String, required: true },
+          role: {
+            type: String,
+            required: true,
+          },
+          imageUrl: {
+            type: String,
+            default: "", // Optional image URL
+          },
+        },
+      ],
+      required: true,
+    },
     hostedBy: {
       type: String,
       required: true,
