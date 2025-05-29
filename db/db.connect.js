@@ -6,7 +6,12 @@ const mongoUrl = process.env.MONGODB;
 
 const initializeDatabase = async () => {
   await mongoose
-    .connect(mongoUrl, { poolSize: 10 })
+    .connect(mongoUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      poolSize: 10,
+      connectTimeoutMS: 30000,
+    })
     .then(() => {
       console.log("Connected  to Database");
     })
