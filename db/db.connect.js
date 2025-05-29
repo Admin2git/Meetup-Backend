@@ -6,7 +6,7 @@ const mongoUrl = process.env.MONGODB;
 
 const initializeDatabase = async () => {
   await mongoose
-    .connect(mongoUrl)
+    .connect(mongoUrl, { poolSize: 10 })
     .then(() => {
       console.log("Connected  to Database");
     })
